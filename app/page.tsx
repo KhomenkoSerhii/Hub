@@ -1,18 +1,17 @@
 import { CarCard, CustomFilter, Hero, SearchBar } from "@/components";
+import ShowMore from "@/components/ShowMore";
 import { fuels, yearsOfProduction } from "@/constants";
+import { HomeProps } from "@/types";
 import { getCars } from "@/utils";
-import Image from "next/image";
-import { useEffect } from "react";
 
-export default async function Home() {
-  // const allCars = await getCars({
-  //   manufacturer: "",
-  //   year: 2022,
-  //   fuel: "",
-  //   limit: 10,
-  //   model: "",
-  // });
-  const allCars = await getCars();
+export default async function Home({ searchParams }: HomeProps) {
+  const allCars = await getCars({
+    manufacturer: searchParams.manufacturer || "",
+    year: searchParams.year || 2023,
+    fuel: searchParams.fuel || "",
+    limit: searchParams.limit || 10,
+    model: searchParams.model || "",
+  });
 
   const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
 
@@ -40,10 +39,10 @@ export default async function Home() {
                 ))}
               </div>
 
-              {/* <ShowMore
+              <ShowMore
                 pageNumber={(searchParams.limit || 10) / 10}
                 isNext={(searchParams.limit || 10) > allCars.length}
-              /> */}
+              />
             </section>
           ) : (
             <div className="home__error-container">

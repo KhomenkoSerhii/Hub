@@ -1,18 +1,21 @@
 "use client";
-import { CarProps } from "@/types";
+
+import { useState } from "react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+
 import CustomButton from "./CustomButton";
+import CarDetails from "./CarDetails";
+import { CarProps } from "@/types";
 import { calculateCarRent, generateCarImageUrl } from "@/utils";
 
 interface CarCardProps {
   car: CarProps;
 }
 
-const CarCard = ({ car }: CarCardProps, index: number) => {
+const CarCard = ({ car }: CarCardProps) => {
   const { city_mpg, year, make, model, transmission, drive } = car;
+
   const [isOpen, setIsOpen] = useState(false);
-  console.log(index);
 
   const carRent = calculateCarRent(city_mpg, year);
 
@@ -35,15 +38,8 @@ const CarCard = ({ car }: CarCardProps, index: number) => {
       </p>
 
       <div className="relative w-full h-40 my-3 object-contain">
-        {/* <Image
-        //   src={generateCarImageUrl(car)}
-          alt="car model"
-          fill
-          priority
-          className="object-contain"
-        /> */}
         <Image
-          src="/hero.png"
+          src={generateCarImageUrl(car)}
           alt="car model"
           fill
           priority
@@ -73,6 +69,7 @@ const CarCard = ({ car }: CarCardProps, index: number) => {
             <p className="car-card__icon-text">{city_mpg} MPG</p>
           </div>
         </div>
+
         <div className="car-card__btn-container">
           <CustomButton
             title="View More"
@@ -82,8 +79,13 @@ const CarCard = ({ car }: CarCardProps, index: number) => {
             handleClick={() => setIsOpen(true)}
           />
         </div>
-        {/* <CarDetails isOpen={isOpen} closeModal={() => setIsOpen(false)} car={car} /> */}
       </div>
+
+      <CarDetails
+        isOpen={isOpen}
+        closeModal={() => setIsOpen(false)}
+        car={car}
+      />
     </div>
   );
 };
